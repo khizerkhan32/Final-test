@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import { useEffect, useState } from 'react';
-
+import SinglePost from './views/SinglePost';
 import Login from './views/Login';
 import Dashboard from './views/Dashboard';
 
@@ -37,6 +37,7 @@ function App() {
           <Route path="/">
             <Route path="/" index element={<Dashboard />} />
             <Route path="/Dash" element={<Dashboard />} />
+            <Route path="/post/:id" element={<SinglePost />} />
           </Route>
         ) : (
           <>
