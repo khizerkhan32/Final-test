@@ -1,23 +1,49 @@
-import logo from './logo.svg';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import { useEffect, useState } from 'react';
+
+import Login from './views/Login';
+import Dashboard from './views/Dashboard';
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      setUser({ id: userId });
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        setUser(null);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Routes>
+        {user?.id ? (
+          <Route path="/">
+            <Route path="/" index element={<Dashboard />} />
+            <Route path="/Dash" element={<Dashboard />} />
+          </Route>
+        ) : (
+          <>
+            <Route path="/" element={<Login />} />
+          </>
+        )}
+      </Routes>
     </div>
   );
 }
